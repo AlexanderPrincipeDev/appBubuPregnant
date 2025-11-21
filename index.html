@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>App para Bubu 💖</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;500;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <div class="header-top">
+                <h1>Para mi Bubu 💖</h1>
+                <div class="header-actions">
+                    <button id="sleepModeBtn" class="icon-btn" aria-label="Modo descanso">😴</button>
+                    <button id="themeToggle" class="icon-btn" aria-label="Modo noche">🌙</button>
+                </div>
+            </div>
+            <p>Escribe o selecciona una frase</p>
+        </header>
+
+        <div class="main-layout">
+            <main class="content-area">
+                <div class="input-area">
+                    <textarea id="textInput" placeholder="Escribe aquí lo que necesitas..."></textarea>
+                </div>
+
+                <div class="controls">
+                    <button id="speakBtn" class="primary-btn">
+                        <span class="icon">🔊</span> Hablar
+                    </button>
+                    <button id="alertBtn" class="alert-btn">
+                        <span class="icon">🔔</span> Alerta
+                    </button>
+                    <button id="whatsappBtn" class="whatsapp-btn">
+                        <span class="icon">💬</span> WhatsApp
+                    </button>
+                    <button id="clearBtn" class="secondary-btn">
+                        <span class="icon">🗑️</span> Borrar
+                    </button>
+                </div>
+
+                <div class="pain-scale">
+                    <h2>Nivel de Dolor</h2>
+                    <div class="pain-grid">
+                        <button class="pain-btn" onclick="speak('No tengo dolor')">🙂</button>
+                        <button class="pain-btn" onclick="speak('Me duele un poco')">😐</button>
+                        <button class="pain-btn" onclick="speak('Me duele algo')">😟</button>
+                        <button class="pain-btn" onclick="speak('Me duele mucho')">😣</button>
+                        <button class="pain-btn" onclick="speak('No aguanto el dolor')">😭</button>
+                    </div>
+                </div>
+
+                <div class="quick-phrases">
+                    <div class="section-header">
+                        <h2>Frases Rápidas</h2>
+                        <button id="editModeBtn" class="text-btn">Editar</button>
+                    </div>
+                    <div class="grid" id="quickPhrasesGrid">
+                        <!-- Buttons will be injected by JS -->
+                    </div>
+                </div>
+            </main>
+
+            <aside class="history-area">
+                <h2>Historial 🕒</h2>
+                <div id="historyList" class="history-list">
+                    <div class="empty-state">Aquí aparecerá lo que digas...</div>
+                </div>
+            </aside>
+        </div>
+    </div>
+    <div id="sleepOverlay" class="sleep-overlay hidden">
+        <div class="sleep-content">
+            <div class="sleep-icon">😴</div>
+            <h2>Modo Descanso</h2>
+            <p>Toca la pantalla para despertar</p>
+            <div class="sleep-hint">La pantalla se mantendrá oscura para no molestar</div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+
+</html>

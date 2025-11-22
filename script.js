@@ -8,7 +8,8 @@ const quickPhrasesGrid = document.getElementById('quickPhrasesGrid');
 
 let isEditMode = false;
 
-let phrases = [
+// Default phrases
+const defaultPhrases = [
     { text: "Tengo sed, quiero agua", emoji: "💧", label: "Agua", count: 0 },
     { text: "Tengo dolor, necesito medicina", emoji: "💊", label: "Dolor", count: 0 },
     { text: "Quiero ir al baño", emoji: "🚽", label: "Baño", count: 0 },
@@ -21,8 +22,17 @@ let phrases = [
     { text: "Por favor", emoji: "✨", label: "Por favor", count: 0 }
 ];
 
+// Load from localStorage or use defaults
+let phrases = JSON.parse(localStorage.getItem('bubu_phrases')) || defaultPhrases;
+
 const historyList = document.getElementById('historyList');
-let history = [];
+// Load history from localStorage
+let history = JSON.parse(localStorage.getItem('bubu_history')) || [];
+
+function saveData() {
+    localStorage.setItem('bubu_phrases', JSON.stringify(phrases));
+    localStorage.setItem('bubu_history', JSON.stringify(history));
+}
 
 // Initialize Speech Synthesis
 const synth = window.speechSynthesis;
@@ -50,6 +60,16 @@ function speak(text) {
             utterThis.voice = spanishVoice;
         }
 
+        const speechIndicator = document.getElementById('speechIndicator');
+
+        utterThis.onstart = () => {
+            speechIndicator.classList.remove('hidden');
+        };
+
+        utterThis.onend = () => {
+            speechIndicator.classList.add('hidden');
+        };
+
         utterThis.pitch = 1;
         utterThis.rate = 1;
         synth.speak(utterThis);
@@ -74,6 +94,7 @@ function speak(text) {
             });
         }
 
+        saveData(); // Save changes
         renderPhrases(); // Re-render to show updated count and order
 
         // Add to history
@@ -89,6 +110,7 @@ function addToHistory(text) {
     if (history.length > 0 && history[0].text === text) return;
 
     history.unshift({ text, time: timeString });
+    saveData(); // Save history
     renderHistory();
 }
 
@@ -125,6 +147,7 @@ function renderPhrases() {
 
 function deletePhrase(text) {
     phrases = phrases.filter(p => p.text !== text);
+    saveData(); // Save deletion
     renderPhrases();
 }
 
@@ -148,6 +171,36 @@ function playAlert() {
 }
 
 // Event Listeners
+const suggestionsContainer = document.getElementById('suggestions');
+
+textInput.addEventListener('input', () => {
+    const text = textInput.value.toLowerCase().trim();
+    if (text.length < 2) {
+        suggestionsContainer.classList.add('hidden');
+        return;
+    }
+
+    // Filter phrases that contain the text
+    const matches = phrases.filter(p => p.text.toLowerCase().includes(text));
+
+    if (matches.length > 0) {
+        suggestionsContainer.innerHTML = matches.map(p => `
+            <button class="suggestion-chip" onclick="applySuggestion('${p.text}')">
+                ${p.emoji} ${p.label}
+            </button>
+        `).join('');
+        suggestionsContainer.classList.remove('hidden');
+    } else {
+        suggestionsContainer.classList.add('hidden');
+    }
+});
+
+function applySuggestion(text) {
+    textInput.value = text;
+    suggestionsContainer.classList.add('hidden');
+    speak(text);
+}
+
 speakBtn.addEventListener('click', () => {
     speak(textInput.value);
 });
@@ -155,6 +208,7 @@ speakBtn.addEventListener('click', () => {
 clearBtn.addEventListener('click', () => {
     textInput.value = '';
     textInput.focus();
+    suggestionsContainer.classList.add('hidden');
 });
 
 alertBtn.addEventListener('click', playAlert);

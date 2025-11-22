@@ -37,6 +37,13 @@
                     <button id="themeToggle" class="icon-btn" aria-label="Modo noche">🌙</button>
                 </div>
             </div>
+            <div id="speechIndicator" class="speech-indicator hidden">
+                <div class="bar"></div>
+                <div class="bar"></div>
+                <div class="bar"></div>
+                <div class="bar"></div>
+                <div class="bar"></div>
+            </div>
             <p>Escribe o selecciona una frase</p>
         </header>
 
@@ -44,6 +51,7 @@
             <main class="content-area">
                 <div class="input-area">
                     <textarea id="textInput" placeholder="Escribe aquí lo que necesitas..."></textarea>
+                    <div id="suggestions" class="suggestions hidden"></div>
                 </div>
 
                 <div class="controls">

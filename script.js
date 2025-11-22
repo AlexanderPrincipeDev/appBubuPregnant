@@ -62,6 +62,9 @@ function speak(text) {
 
         const speechIndicator = document.getElementById('speechIndicator');
 
+        // Force show immediately
+        speechIndicator.classList.remove('hidden');
+
         utterThis.onstart = () => {
             speechIndicator.classList.remove('hidden');
         };
@@ -69,6 +72,11 @@ function speak(text) {
         utterThis.onend = () => {
             speechIndicator.classList.add('hidden');
         };
+
+        // Fallback: Hide after 5 seconds max (in case onend doesn't fire)
+        setTimeout(() => {
+            speechIndicator.classList.add('hidden');
+        }, 5000);
 
         utterThis.pitch = 1;
         utterThis.rate = 1;

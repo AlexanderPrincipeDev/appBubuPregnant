@@ -1,4 +1,4 @@
-const CACHE_NAME = 'bubu-app-v8-disable-double-tap-zoom';
+const CACHE_NAME = 'bubu-app-v9-write-and-speak';
 const ASSETS_TO_CACHE = [
     './',
     './index.html',

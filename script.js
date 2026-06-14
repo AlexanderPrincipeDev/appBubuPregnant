@@ -9,7 +9,7 @@ const whatsappBtn = document.getElementById('whatsappBtn');
 const themeToggle = document.getElementById('themeToggle');
 const priorityGrid = document.getElementById('priorityGrid');
 const commonGrid = document.getElementById('commonGrid');
-const chatLog = document.getElementById('chatLog');
+const currentMessage = document.getElementById('currentMessage');
 const speechIndicator = document.getElementById('speechIndicator');
 const spokenToast = document.getElementById('spokenToast');
 
@@ -59,14 +59,8 @@ if (speechSynthesis.onvoiceschanged !== undefined) {
     speechSynthesis.onvoiceschanged = loadVoices;
 }
 
-function addMessage(text) {
-    const emptyMessage = chatLog.querySelector('.empty-message');
-    if (emptyMessage) emptyMessage.remove();
-
-    const message = document.createElement('div');
-    message.className = 'message';
-    message.textContent = text;
-    chatLog.prepend(message);
+function updateCurrentMessage(text) {
+    currentMessage.textContent = text || 'Escribe o toca una frase';
 }
 
 function showToast(text) {
@@ -99,8 +93,8 @@ function speak(text) {
     synth.speak(utterance);
     lastMessage = cleanText;
     localStorage.setItem('bubu_last_message', lastMessage);
+    updateCurrentMessage(cleanText);
     showToast(cleanText);
-    addMessage(cleanText);
 }
 
 function stopVoice() {
@@ -149,7 +143,12 @@ repeatBtn.addEventListener('click', () => {
 stopBtn.addEventListener('click', stopVoice);
 clearBtn.addEventListener('click', () => {
     textInput.value = '';
+    updateCurrentMessage('Escribe o toca una frase');
     textInput.focus();
+});
+
+textInput.addEventListener('input', () => {
+    updateCurrentMessage(textInput.value.trim());
 });
 
 helpBtn.addEventListener('click', () => {
@@ -177,5 +176,6 @@ if (localStorage.getItem('bubu_dark_mode') === '1') {
     themeToggle.textContent = '☀️';
 }
 
+if (lastMessage) updateCurrentMessage(lastMessage);
 renderPhrases();
 loadVoices();

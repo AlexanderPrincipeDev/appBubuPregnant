@@ -25,18 +25,18 @@
     <main class="app-shell">
         <header class="app-header">
             <div>
-                <p class="eyebrow">Habitación de la clínica</p>
                 <h1>Bubu 💖</h1>
                 <p>Un toque y la app habla por ella.</p>
             </div>
             <button id="themeToggle" class="round-btn" aria-label="Cambiar tema">🌙</button>
         </header>
 
-        <section class="chat-card" aria-label="Chat para hablar">
+        <section class="chat-card" aria-label="Escribir y hablar">
             <div id="spokenToast" class="spoken-toast hidden" aria-live="polite"></div>
 
-            <div id="chatLog" class="chat-log">
-                <div class="message empty-message">Toca una frase o escribe algo para que se escuche.</div>
+            <div class="current-message">
+                <span>Mensaje actual</span>
+                <strong id="currentMessage">Escribe o toca una frase</strong>
             </div>
 
             <div id="speechIndicator" class="speech-indicator hidden">

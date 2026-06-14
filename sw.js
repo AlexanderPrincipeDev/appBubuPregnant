@@ -1,4 +1,4 @@
-const CACHE_NAME = 'bubu-app-v7-fixed-chat-height';
+const CACHE_NAME = 'bubu-app-v8-disable-double-tap-zoom';
 const ASSETS_TO_CACHE = [
     './',
     './index.html',

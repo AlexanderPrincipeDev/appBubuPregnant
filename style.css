@@ -56,6 +56,9 @@ textarea {
 button {
     border: 0;
     cursor: pointer;
+    touch-action: manipulation;
+    user-select: none;
+    -webkit-user-select: none;
 }
 
 .hidden {

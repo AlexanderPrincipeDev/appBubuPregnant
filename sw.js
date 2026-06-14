@@ -1,4 +1,4 @@
-const CACHE_NAME = 'bubu-app-v11-usage-ranking';
+const CACHE_NAME = 'bubu-app-v12-reset-ranking-modal';
 const ASSETS_TO_CACHE = [
     './',
     './index.html',

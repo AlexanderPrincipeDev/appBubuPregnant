@@ -204,6 +204,10 @@ textarea:focus {
     color: var(--text);
 }
 
+.reset-ranking-btn {
+    opacity: 0.78;
+}
+
 .quick-section {
     padding: 16px;
 }
@@ -369,6 +373,66 @@ textarea:focus {
     font-size: 1.08rem;
 }
 
+.modal-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 50;
+    background: rgba(18, 9, 16, 0.62);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+}
+
+.modal-card {
+    width: min(100%, 460px);
+    background: var(--card);
+    color: var(--text);
+    border-radius: 26px;
+    border: 1px solid var(--border);
+    box-shadow: 0 24px 70px rgba(0, 0, 0, 0.32);
+    padding: 26px;
+    text-align: center;
+}
+
+.modal-card h2 {
+    font-size: 1.6rem;
+    margin-bottom: 10px;
+}
+
+.modal-card p {
+    color: var(--muted);
+    font-size: 1.08rem;
+    line-height: 1.35;
+    margin-bottom: 22px;
+}
+
+.modal-actions {
+    display: grid;
+    grid-template-columns: 1.25fr 1fr;
+    gap: 12px;
+}
+
+.modal-cancel-btn,
+.modal-danger-btn {
+    min-height: 62px;
+    border-radius: 18px;
+    font-weight: 800;
+    font-size: 1.02rem;
+    touch-action: manipulation;
+}
+
+.modal-cancel-btn {
+    background: var(--primary);
+    color: white;
+}
+
+.modal-danger-btn {
+    background: #fee2e2;
+    color: #991b1b;
+    border: 2px solid #fecaca;
+}
+
 .speech-indicator {
     display: flex;
     justify-content: center;
@@ -454,7 +518,7 @@ textarea:focus {
         grid-column: 1 / -1;
         grid-row: 4;
         padding: 20px;
-        grid-template-columns: 1.4fr 1fr 1fr 1fr;
+        grid-template-columns: 1.4fr 1fr 1fr 1fr 1fr;
     }
 
     .help-btn {
@@ -565,5 +629,9 @@ textarea:focus {
 
     .priority-btn {
         min-height: 88px;
+    }
+
+    .modal-actions {
+        grid-template-columns: 1fr;
     }
 }

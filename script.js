@@ -3,6 +3,10 @@ const speakBtn = document.getElementById('speakBtn');
 const repeatBtn = document.getElementById('repeatBtn');
 const stopBtn = document.getElementById('stopBtn');
 const clearBtn = document.getElementById('clearBtn');
+const resetRankingBtn = document.getElementById('resetRankingBtn');
+const resetModal = document.getElementById('resetModal');
+const cancelResetBtn = document.getElementById('cancelResetBtn');
+const confirmResetBtn = document.getElementById('confirmResetBtn');
 const helpBtn = document.getElementById('helpBtn');
 const nurseBtn = document.getElementById('nurseBtn');
 const whatsappBtn = document.getElementById('whatsappBtn');
@@ -66,6 +70,21 @@ function savePhrases() {
         text: phrase.text,
         count: phrase.count || 0
     }))));
+}
+
+function resetRanking() {
+    phrases = phrases.map(phrase => ({ ...phrase, count: 0 }));
+    savePhrases();
+    renderPhrases();
+}
+
+function openResetModal() {
+    resetModal.classList.remove('hidden');
+    cancelResetBtn.focus();
+}
+
+function closeResetModal() {
+    resetModal.classList.add('hidden');
 }
 
 function sortedPhrases() {
@@ -174,6 +193,22 @@ clearBtn.addEventListener('click', () => {
     textInput.value = '';
     updateCurrentMessage('Escribe o toca una frase');
     textInput.focus();
+});
+
+resetRankingBtn.addEventListener('click', openResetModal);
+cancelResetBtn.addEventListener('click', closeResetModal);
+confirmResetBtn.addEventListener('click', () => {
+    resetRanking();
+    closeResetModal();
+});
+resetModal.addEventListener('click', event => {
+    if (event.target === resetModal) closeResetModal();
+});
+
+document.addEventListener('keydown', event => {
+    if (event.key === 'Escape' && !resetModal.classList.contains('hidden')) {
+        closeResetModal();
+    }
 });
 
 textInput.addEventListener('input', () => {

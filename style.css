@@ -8,6 +8,10 @@
     --soft: #fce7f3;
     --border: #f9cfe3;
     --danger: #ef4444;
+    --baby: #a855f7;
+    --care: #0ea5e9;
+    --answer: #16a34a;
+    --comfort: #f59e0b;
     --shadow: 0 16px 40px rgba(157, 23, 77, 0.12);
     --radius: 24px;
     --font: 'Outfit', system-ui, sans-serif;
@@ -274,6 +278,59 @@ textarea:focus {
     background: var(--danger);
 }
 
+.priority-btn.is-baby,
+.phrase-btn.is-baby {
+    background: #f3e8ff;
+    border-color: #d8b4fe;
+    color: #6b21a8;
+}
+
+.priority-btn.is-urgent,
+.phrase-btn.is-urgent {
+    background: #fee2e2;
+    border-color: #fecaca;
+    color: #991b1b;
+}
+
+.priority-btn.is-comfort,
+.phrase-btn.is-comfort {
+    background: #fef3c7;
+    border-color: #fde68a;
+    color: #92400e;
+}
+
+.priority-btn.is-care,
+.phrase-btn.is-care {
+    background: #e0f2fe;
+    border-color: #bae6fd;
+    color: #075985;
+}
+
+.priority-btn.is-answer,
+.phrase-btn.is-answer {
+    background: #dcfce7;
+    border-color: #bbf7d0;
+    color: #166534;
+}
+
+.priority-btn.is-baby,
+.priority-btn.is-urgent,
+.priority-btn.is-comfort {
+    color: white;
+}
+
+.priority-btn.is-baby {
+    background: var(--baby);
+}
+
+.priority-btn.is-urgent {
+    background: var(--danger);
+}
+
+.priority-btn.is-comfort {
+    background: var(--comfort);
+}
+
 .quick-section h2 {
     font-size: 1.15rem;
     margin-bottom: 12px;
@@ -411,9 +468,10 @@ textarea:focus {
     }
 
     .chat-log {
-        min-height: 260px;
-        max-height: none;
-        flex: 1;
+        height: 230px;
+        min-height: 230px;
+        max-height: 230px;
+        flex: 0 0 auto;
     }
 
     textarea {

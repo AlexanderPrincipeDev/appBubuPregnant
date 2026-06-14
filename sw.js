@@ -1,4 +1,4 @@
-const CACHE_NAME = 'bubu-app-v5-cesarea-day';
+const CACHE_NAME = 'bubu-app-v7-fixed-chat-height';
 const ASSETS_TO_CACHE = [
     './',
     './index.html',

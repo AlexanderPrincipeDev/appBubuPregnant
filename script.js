@@ -12,6 +12,7 @@ const nurseBtn = document.getElementById('nurseBtn');
 const whatsappBtn = document.getElementById('whatsappBtn');
 const themeToggle = document.getElementById('themeToggle');
 const buttonViewToggle = document.getElementById('buttonViewToggle');
+const closeButtonViewBtn = document.getElementById('closeButtonViewBtn');
 const priorityGrid = document.getElementById('priorityGrid');
 const commonGrid = document.getElementById('commonGrid');
 const buttonOnlyView = document.getElementById('buttonOnlyView');
@@ -234,9 +235,7 @@ function renderCategoryBoard() {
 function applyButtonOnlyView() {
     document.body.classList.toggle('button-only-mode', isButtonOnlyView);
     buttonOnlyView.classList.toggle('hidden', !isButtonOnlyView);
-    priorityGrid.closest('.priority-section').classList.toggle('hidden', isButtonOnlyView);
-    commonGrid.closest('.quick-section').classList.toggle('hidden', isButtonOnlyView);
-    buttonViewToggle.textContent = isButtonOnlyView ? 'Vista normal' : 'Solo botones';
+    buttonViewToggle.textContent = 'Solo botones';
     localStorage.setItem('bubu_button_view', isButtonOnlyView ? '1' : '0');
 }
 
@@ -262,13 +261,23 @@ resetModal.addEventListener('click', event => {
 });
 
 buttonViewToggle.addEventListener('click', () => {
-    isButtonOnlyView = !isButtonOnlyView;
+    isButtonOnlyView = true;
+    applyButtonOnlyView();
+});
+
+closeButtonViewBtn.addEventListener('click', () => {
+    isButtonOnlyView = false;
     applyButtonOnlyView();
 });
 
 document.addEventListener('keydown', event => {
     if (event.key === 'Escape' && !resetModal.classList.contains('hidden')) {
         closeResetModal();
+    }
+
+    if (event.key === 'Escape' && isButtonOnlyView) {
+        isButtonOnlyView = false;
+        applyButtonOnlyView();
     }
 });
 

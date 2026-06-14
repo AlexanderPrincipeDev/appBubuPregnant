@@ -1,4 +1,4 @@
-const CACHE_NAME = 'bubu-app-v13-button-only-categories';
+const CACHE_NAME = 'bubu-app-v14-zen-button-view';
 const ASSETS_TO_CACHE = [
     './',
     './index.html',

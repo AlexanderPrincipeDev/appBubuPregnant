@@ -1,4 +1,4 @@
-const CACHE_NAME = 'bubu-app-v9-write-and-speak';
+const CACHE_NAME = 'bubu-app-v11-usage-ranking';
 const ASSETS_TO_CACHE = [
     './',
     './index.html',

@@ -11,20 +11,16 @@ const priorityGrid = document.getElementById('priorityGrid');
 const commonGrid = document.getElementById('commonGrid');
 const currentMessage = document.getElementById('currentMessage');
 const speechIndicator = document.getElementById('speechIndicator');
-const spokenToast = document.getElementById('spokenToast');
 
 const synth = window.speechSynthesis;
 let voices = [];
 let lastMessage = localStorage.getItem('bubu_last_message') || '';
 
-const priorityPhrases = [
-    { emoji: '👶', label: 'Dame a la bebé', text: 'Dame a la bebé', type: 'baby' },
-    { emoji: '😣', label: 'Me duele mucho', text: 'Me duele mucho', type: 'urgent' },
-    { emoji: '💧', label: 'Tengo sed', text: 'Tengo sed', type: 'comfort' },
-    { emoji: '👩‍⚕️', label: 'Enfermera', text: 'Llama a la enfermera por favor', type: 'urgent' }
-];
-
-const commonPhrases = [
+const defaultPhrases = [
+    { emoji: '👶', label: 'Dame a la bebé', text: 'Dame a la bebé', type: 'baby', count: 0 },
+    { emoji: '😣', label: 'Me duele mucho', text: 'Me duele mucho', type: 'urgent', count: 0 },
+    { emoji: '💧', label: 'Tengo sed', text: 'Tengo sed', type: 'comfort', count: 0 },
+    { emoji: '👩‍⚕️', label: 'Enfermera', text: 'Llama a la enfermera por favor', type: 'urgent', count: 0 },
     { emoji: '✅', label: 'Sí', text: 'Sí', type: 'answer' },
     { emoji: '❌', label: 'No', text: 'No', type: 'answer' },
     { emoji: '🐢', label: 'Despacio', text: 'Despacio por favor', type: 'care' },
@@ -49,7 +45,35 @@ const commonPhrases = [
     { emoji: '💤', label: 'Quiero dormir', text: 'Quiero dormir', type: 'comfort' },
     { emoji: '🚪', label: 'No visitas', text: 'No quiero visitas ahora', type: 'comfort' },
     { emoji: '🙏', label: 'Gracias', text: 'Gracias amor', type: 'answer' }
-];
+].map((phrase, index) => ({ ...phrase, count: phrase.count || 0, order: index }));
+
+let phrases = loadPhrases();
+
+function loadPhrases() {
+    try {
+        const savedPhrases = JSON.parse(localStorage.getItem('bubu_phrases_usage')) || [];
+        return defaultPhrases.map(defaultPhrase => {
+            const savedPhrase = savedPhrases.find(phrase => phrase.text === defaultPhrase.text);
+            return savedPhrase ? { ...defaultPhrase, count: savedPhrase.count || 0 } : defaultPhrase;
+        });
+    } catch (error) {
+        return defaultPhrases;
+    }
+}
+
+function savePhrases() {
+    localStorage.setItem('bubu_phrases_usage', JSON.stringify(phrases.map(phrase => ({
+        text: phrase.text,
+        count: phrase.count || 0
+    }))));
+}
+
+function sortedPhrases() {
+    return [...phrases].sort((a, b) => {
+        if ((b.count || 0) !== (a.count || 0)) return (b.count || 0) - (a.count || 0);
+        return a.order - b.order;
+    });
+}
 
 function loadVoices() {
     voices = synth.getVoices();
@@ -61,15 +85,6 @@ if (speechSynthesis.onvoiceschanged !== undefined) {
 
 function updateCurrentMessage(text) {
     currentMessage.textContent = text || 'Escribe o toca una frase';
-}
-
-function showToast(text) {
-    spokenToast.innerHTML = `<span>Diciendo</span><strong>${text}</strong>`;
-    spokenToast.classList.remove('hidden');
-    clearTimeout(showToast.timer);
-    showToast.timer = setTimeout(() => {
-        spokenToast.classList.add('hidden');
-    }, 2200);
 }
 
 function speak(text) {
@@ -94,13 +109,11 @@ function speak(text) {
     lastMessage = cleanText;
     localStorage.setItem('bubu_last_message', lastMessage);
     updateCurrentMessage(cleanText);
-    showToast(cleanText);
 }
 
 function stopVoice() {
     if (synth.speaking) synth.cancel();
     speechIndicator.classList.add('hidden');
-    spokenToast.classList.add('hidden');
 }
 
 function playSoftAlert() {
@@ -119,21 +132,37 @@ function playSoftAlert() {
     oscillator.stop(audioContext.currentTime + 0.5);
 }
 
+function usePhrase(text) {
+    const phrase = phrases.find(item => item.text === text);
+    if (phrase) {
+        phrase.count = (phrase.count || 0) + 1;
+        savePhrases();
+    }
+
+    speak(text);
+    renderPhrases();
+}
+
 function renderPhraseGrid(grid, phrases, className) {
     grid.innerHTML = '';
 
     phrases.forEach(phrase => {
         const button = document.createElement('button');
         button.className = `${className} ${phrase.type ? `is-${phrase.type}` : ''}`;
-        button.innerHTML = `<span>${phrase.emoji}</span>${phrase.label}`;
-        button.addEventListener('click', () => speak(phrase.text));
+        button.innerHTML = `
+            <span class="button-emoji">${phrase.emoji}</span>
+            <span class="button-label">${phrase.label}</span>
+            ${phrase.count > 0 ? `<span class="count-badge">${phrase.count}</span>` : ''}
+        `;
+        button.addEventListener('click', () => usePhrase(phrase.text));
         grid.appendChild(button);
     });
 }
 
 function renderPhrases() {
-    renderPhraseGrid(priorityGrid, priorityPhrases, 'priority-btn');
-    renderPhraseGrid(commonGrid, commonPhrases, 'phrase-btn');
+    const orderedPhrases = sortedPhrases();
+    renderPhraseGrid(priorityGrid, orderedPhrases.slice(0, 4), 'priority-btn');
+    renderPhraseGrid(commonGrid, orderedPhrases.slice(4), 'phrase-btn');
 }
 
 speakBtn.addEventListener('click', () => speak(textInput.value));

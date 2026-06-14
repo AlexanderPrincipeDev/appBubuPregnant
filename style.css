@@ -121,33 +121,6 @@ h1 {
     gap: 12px;
 }
 
-.spoken-toast {
-    position: absolute;
-    left: 16px;
-    right: 16px;
-    top: 16px;
-    z-index: 5;
-    background: rgba(95, 18, 54, 0.96);
-    color: white;
-    border-radius: 20px;
-    padding: 14px 16px;
-    text-align: center;
-    box-shadow: 0 14px 32px rgba(0, 0, 0, 0.22);
-}
-
-.spoken-toast span {
-    display: block;
-    font-size: 0.86rem;
-    opacity: 0.82;
-    margin-bottom: 2px;
-}
-
-.spoken-toast strong {
-    display: block;
-    font-size: clamp(1.25rem, 3vw, 1.7rem);
-    line-height: 1.15;
-}
-
 .current-message {
     min-height: 112px;
     background: linear-gradient(135deg, var(--primary), var(--primary-dark));
@@ -246,6 +219,7 @@ textarea:focus {
 }
 
 .priority-btn {
+    position: relative;
     min-height: 104px;
     border-radius: 22px;
     background: var(--primary);
@@ -259,9 +233,14 @@ textarea:focus {
     padding: 12px;
 }
 
-.priority-btn span {
+.priority-btn .button-emoji {
     font-size: 2.25rem;
     line-height: 1;
+}
+
+.button-label {
+    font-size: inherit;
+    line-height: 1.12;
 }
 
 .priority-btn:nth-child(2),
@@ -334,6 +313,7 @@ textarea:focus {
 }
 
 .phrase-btn {
+    position: relative;
     background: var(--card);
     color: var(--text);
     border: 2px solid var(--border);
@@ -346,9 +326,32 @@ textarea:focus {
     gap: 7px;
 }
 
-.phrase-btn span {
+.phrase-btn .button-emoji {
     font-size: 2.05rem;
     line-height: 1;
+}
+
+.count-badge {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    min-width: 26px;
+    height: 26px;
+    padding: 0 8px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.9);
+    color: var(--text);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.82rem;
+    font-weight: 800;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.12);
+}
+
+.phrase-btn .count-badge {
+    background: var(--primary);
+    color: white;
 }
 
 .quiet-section {

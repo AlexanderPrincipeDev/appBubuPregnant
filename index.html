@@ -28,7 +28,10 @@
                 <h1>Bubu 💖</h1>
                 <p>Un toque y la app habla por ella.</p>
             </div>
-            <button id="themeToggle" class="round-btn" aria-label="Cambiar tema">🌙</button>
+            <div class="header-actions">
+                <button id="buttonViewToggle" class="view-toggle-btn">Solo botones</button>
+                <button id="themeToggle" class="round-btn" aria-label="Cambiar tema">🌙</button>
+            </div>
         </header>
 
         <section class="chat-card" aria-label="Escribir y hablar">
@@ -57,6 +60,14 @@
         <section class="quick-section" aria-label="Frases más comunes">
             <h2>Lo más común</h2>
             <div id="commonGrid" class="common-grid"></div>
+        </section>
+
+        <section id="buttonOnlyView" class="button-only-view hidden" aria-label="Vista solo botones">
+            <div class="section-title-row">
+                <h2>Solo botones</h2>
+                <p>Organizado por lo más probable</p>
+            </div>
+            <div id="categoryBoard" class="category-board"></div>
         </section>
 
         <section class="quiet-section" aria-label="Ayuda y contacto">

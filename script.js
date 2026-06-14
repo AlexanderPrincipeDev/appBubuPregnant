@@ -11,14 +11,18 @@ const helpBtn = document.getElementById('helpBtn');
 const nurseBtn = document.getElementById('nurseBtn');
 const whatsappBtn = document.getElementById('whatsappBtn');
 const themeToggle = document.getElementById('themeToggle');
+const buttonViewToggle = document.getElementById('buttonViewToggle');
 const priorityGrid = document.getElementById('priorityGrid');
 const commonGrid = document.getElementById('commonGrid');
+const buttonOnlyView = document.getElementById('buttonOnlyView');
+const categoryBoard = document.getElementById('categoryBoard');
 const currentMessage = document.getElementById('currentMessage');
 const speechIndicator = document.getElementById('speechIndicator');
 
 const synth = window.speechSynthesis;
 let voices = [];
 let lastMessage = localStorage.getItem('bubu_last_message') || '';
+let isButtonOnlyView = localStorage.getItem('bubu_button_view') === '1';
 
 const defaultPhrases = [
     { emoji: '👶', label: 'Dame a la bebé', text: 'Dame a la bebé', type: 'baby', count: 0 },
@@ -50,6 +54,15 @@ const defaultPhrases = [
     { emoji: '🚪', label: 'No visitas', text: 'No quiero visitas ahora', type: 'comfort' },
     { emoji: '🙏', label: 'Gracias', text: 'Gracias amor', type: 'answer' }
 ].map((phrase, index) => ({ ...phrase, count: phrase.count || 0, order: index }));
+
+const buttonCategories = [
+    { title: 'Más probable', types: ['baby', 'urgent', 'comfort'], labels: ['Dame a la bebé', 'Me duele mucho', 'Tengo sed', 'Enfermera'] },
+    { title: 'Respuestas rápidas', types: ['answer'] },
+    { title: 'Moverme y cuidarme', types: ['care'] },
+    { title: 'Bebé y lactancia', types: ['baby'] },
+    { title: 'Dolor y clínica', types: ['urgent'] },
+    { title: 'Comodidad', types: ['comfort'] }
+];
 
 let phrases = loadPhrases();
 
@@ -162,6 +175,18 @@ function usePhrase(text) {
     renderPhrases();
 }
 
+function phrasesForCategory(category) {
+    let categoryPhrases = phrases.filter(phrase => {
+        if (category.labels) return category.labels.includes(phrase.label);
+        return category.types.includes(phrase.type);
+    });
+
+    return categoryPhrases.sort((a, b) => {
+        if ((b.count || 0) !== (a.count || 0)) return (b.count || 0) - (a.count || 0);
+        return a.order - b.order;
+    });
+}
+
 function renderPhraseGrid(grid, phrases, className) {
     grid.innerHTML = '';
 
@@ -182,6 +207,37 @@ function renderPhrases() {
     const orderedPhrases = sortedPhrases();
     renderPhraseGrid(priorityGrid, orderedPhrases.slice(0, 4), 'priority-btn');
     renderPhraseGrid(commonGrid, orderedPhrases.slice(4), 'phrase-btn');
+    renderCategoryBoard();
+}
+
+function renderCategoryBoard() {
+    categoryBoard.innerHTML = '';
+
+    buttonCategories.forEach(category => {
+        const section = document.createElement('section');
+        section.className = 'button-category';
+
+        const title = document.createElement('h3');
+        title.textContent = category.title;
+
+        const grid = document.createElement('div');
+        grid.className = 'category-grid';
+
+        renderPhraseGrid(grid, phrasesForCategory(category), 'category-btn');
+
+        section.appendChild(title);
+        section.appendChild(grid);
+        categoryBoard.appendChild(section);
+    });
+}
+
+function applyButtonOnlyView() {
+    document.body.classList.toggle('button-only-mode', isButtonOnlyView);
+    buttonOnlyView.classList.toggle('hidden', !isButtonOnlyView);
+    priorityGrid.closest('.priority-section').classList.toggle('hidden', isButtonOnlyView);
+    commonGrid.closest('.quick-section').classList.toggle('hidden', isButtonOnlyView);
+    buttonViewToggle.textContent = isButtonOnlyView ? 'Vista normal' : 'Solo botones';
+    localStorage.setItem('bubu_button_view', isButtonOnlyView ? '1' : '0');
 }
 
 speakBtn.addEventListener('click', () => speak(textInput.value));
@@ -203,6 +259,11 @@ confirmResetBtn.addEventListener('click', () => {
 });
 resetModal.addEventListener('click', event => {
     if (event.target === resetModal) closeResetModal();
+});
+
+buttonViewToggle.addEventListener('click', () => {
+    isButtonOnlyView = !isButtonOnlyView;
+    applyButtonOnlyView();
 });
 
 document.addEventListener('keydown', event => {
@@ -242,4 +303,5 @@ if (localStorage.getItem('bubu_dark_mode') === '1') {
 
 if (lastMessage) updateCurrentMessage(lastMessage);
 renderPhrases();
+applyButtonOnlyView();
 loadVoices();

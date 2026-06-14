@@ -8,105 +8,67 @@
     <link rel="stylesheet" href="style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#db2777">
     <link rel="apple-touch-icon" href="icon-192.png">
     <script>
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
-                navigator.serviceWorker.register('./sw.js')
-                    .then(registration => {
-                        console.log('ServiceWorker registration successful');
-                    })
-                    .catch(err => {
-                        console.log('ServiceWorker registration failed: ', err);
-                    });
+                navigator.serviceWorker.register('./sw.js');
             });
         }
     </script>
 </head>
 
 <body>
-    <div class="container">
-        <header>
-            <div class="header-top">
-                <h1>Para mi Bubu 💖</h1>
-                <div class="header-actions">
-                    <button id="sleepModeBtn" class="icon-btn" aria-label="Modo descanso">😴</button>
-                    <button id="themeToggle" class="icon-btn" aria-label="Modo noche">🌙</button>
-                </div>
+    <main class="app-shell">
+        <header class="app-header">
+            <div>
+                <p class="eyebrow">Habitación de la clínica</p>
+                <h1>Bubu 💖</h1>
+                <p>Un toque y la app habla por ella.</p>
             </div>
-            <div id="speechIndicator" class="speech-indicator hidden">
-                <div class="bar"></div>
-                <div class="bar"></div>
-                <div class="bar"></div>
-                <div class="bar"></div>
-                <div class="bar"></div>
-            </div>
-            <p>Escribe o selecciona una frase</p>
+            <button id="themeToggle" class="round-btn" aria-label="Cambiar tema">🌙</button>
         </header>
 
-        <div class="main-layout">
-            <main class="content-area">
-                <div class="input-area">
-                    <textarea id="textInput" placeholder="Escribe aquí lo que necesitas..."></textarea>
-                    <div id="suggestions" class="suggestions hidden"></div>
-                </div>
+        <section class="chat-card" aria-label="Chat para hablar">
+            <div id="spokenToast" class="spoken-toast hidden" aria-live="polite"></div>
 
-                <div class="controls">
-                    <button id="speakBtn" class="primary-btn">
-                        <span class="icon">🔊</span> Hablar
-                    </button>
-                    <button id="alertBtn" class="alert-btn">
-                        <span class="icon">🔔</span> Alerta
-                    </button>
-                    <button id="whatsappBtn" class="whatsapp-btn">
-                        <span class="icon">💬</span> WhatsApp
-                    </button>
-                    <button id="clearBtn" class="secondary-btn">
-                        <span class="icon">🗑️</span> Borrar
-                    </button>
-                </div>
+            <div id="chatLog" class="chat-log">
+                <div class="message empty-message">Toca una frase o escribe algo para que se escuche.</div>
+            </div>
 
-                <div class="pain-scale">
-                    <h2>Nivel de Dolor</h2>
-                    <div class="pain-grid">
-                        <button class="pain-btn" onclick="speak('No tengo dolor')">🙂</button>
-                        <button class="pain-btn" onclick="speak('Me duele un poco')">😐</button>
-                        <button class="pain-btn" onclick="speak('Me duele algo')">😟</button>
-                        <button class="pain-btn" onclick="speak('Me duele mucho')">😣</button>
-                        <button class="pain-btn" onclick="speak('No aguanto el dolor')">😭</button>
-                    </div>
-                </div>
+            <div id="speechIndicator" class="speech-indicator hidden">
+                <span></span><span></span><span></span>
+            </div>
 
-                <div class="quick-phrases">
-                    <div class="section-header">
-                        <h2>Frases Rápidas</h2>
-                        <button id="editModeBtn" class="text-btn">Editar</button>
-                    </div>
-                    <div class="grid" id="quickPhrasesGrid">
-                        <!-- Buttons will be injected by JS -->
-                    </div>
-                </div>
-            </main>
+            <textarea id="textInput" placeholder="Escribe aquí si necesita algo específico..."></textarea>
 
-            <aside class="history-area">
-                <h2>Historial 🕒</h2>
-                <div id="historyList" class="history-list">
-                    <div class="empty-state">Aquí aparecerá lo que digas...</div>
-                </div>
-            </aside>
-        </div>
-    </div>
-    <div id="sleepOverlay" class="sleep-overlay hidden">
-        <div class="sleep-content">
-            <div class="sleep-icon">😴</div>
-            <h2>Modo Descanso</h2>
-            <p>Toca la pantalla para despertar</p>
-            <div class="sleep-hint">La pantalla se mantendrá oscura para no molestar</div>
-        </div>
-    </div>
+            <div class="main-actions">
+                <button id="speakBtn" class="primary-btn">🔊 Hablar</button>
+                <button id="repeatBtn" class="secondary-btn">🔁 Repetir</button>
+                <button id="stopBtn" class="secondary-btn">⏹️ Parar</button>
+            </div>
+        </section>
+
+        <section class="priority-section" aria-label="Frases principales">
+            <div id="priorityGrid" class="priority-grid"></div>
+        </section>
+
+        <section class="quick-section" aria-label="Frases más comunes">
+            <h2>Lo más común</h2>
+            <div id="commonGrid" class="common-grid"></div>
+        </section>
+
+        <section class="quiet-section" aria-label="Ayuda y contacto">
+            <button id="helpBtn" class="help-btn">🚨 Amor, ayúdame por favor</button>
+            <button id="nurseBtn" class="quiet-btn">👩‍⚕️ Llama a la enfermera</button>
+            <button id="whatsappBtn" class="quiet-btn">💬 Mandar WhatsApp</button>
+            <button id="clearBtn" class="quiet-btn">🧹 Limpiar texto</button>
+        </section>
+    </main>
+
     <script src="script.js"></script>
 </body>
 

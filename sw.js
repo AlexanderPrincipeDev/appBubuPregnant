@@ -1,4 +1,4 @@
-const CACHE_NAME = 'bubu-app-v1';
+const CACHE_NAME = 'bubu-app-v5-cesarea-day';
 const ASSETS_TO_CACHE = [
     './',
     './index.html',
@@ -18,6 +18,7 @@ self.addEventListener('install', (event) => {
                 return cache.addAll(ASSETS_TO_CACHE);
             })
     );
+    self.skipWaiting();
 });
 
 // Activate event - cleanup old caches
@@ -31,7 +32,7 @@ self.addEventListener('activate', (event) => {
                     }
                 })
             );
-        })
+        }).then(() => self.clients.claim())
     );
 });
 

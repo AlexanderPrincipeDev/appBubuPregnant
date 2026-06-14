@@ -1,42 +1,47 @@
 const textInput = document.getElementById('textInput');
 const speakBtn = document.getElementById('speakBtn');
+const repeatBtn = document.getElementById('repeatBtn');
+const stopBtn = document.getElementById('stopBtn');
 const clearBtn = document.getElementById('clearBtn');
-const alertBtn = document.getElementById('alertBtn');
+const helpBtn = document.getElementById('helpBtn');
+const nurseBtn = document.getElementById('nurseBtn');
+const whatsappBtn = document.getElementById('whatsappBtn');
 const themeToggle = document.getElementById('themeToggle');
-const editModeBtn = document.getElementById('editModeBtn');
-const quickPhrasesGrid = document.getElementById('quickPhrasesGrid');
+const priorityGrid = document.getElementById('priorityGrid');
+const commonGrid = document.getElementById('commonGrid');
+const chatLog = document.getElementById('chatLog');
+const speechIndicator = document.getElementById('speechIndicator');
+const spokenToast = document.getElementById('spokenToast');
 
-let isEditMode = false;
-
-// Default phrases
-const defaultPhrases = [
-    { text: "Tengo sed, quiero agua", emoji: "💧", label: "Agua", count: 0 },
-    { text: "Tengo dolor, necesito medicina", emoji: "💊", label: "Dolor", count: 0 },
-    { text: "Quiero ir al baño", emoji: "🚽", label: "Baño", count: 0 },
-    { text: "¿Dónde está el bebé?", emoji: "👶", label: "Bebé", count: 0 },
-    { text: "Tengo hambre", emoji: "🍎", label: "Comida", count: 0 },
-    { text: "Tengo frío", emoji: "🥶", label: "Frío", count: 0 },
-    { text: "Tengo calor", emoji: "🥵", label: "Calor", count: 0 },
-    { text: "Te amo mucho", emoji: "❤️", label: "Te amo", count: 0 },
-    { text: "Gracias", emoji: "🙏", label: "Gracias", count: 0 },
-    { text: "Por favor", emoji: "✨", label: "Por favor", count: 0 }
-];
-
-// Load from localStorage or use defaults
-let phrases = JSON.parse(localStorage.getItem('bubu_phrases')) || defaultPhrases;
-
-const historyList = document.getElementById('historyList');
-// Load history from localStorage
-let history = JSON.parse(localStorage.getItem('bubu_history')) || [];
-
-function saveData() {
-    localStorage.setItem('bubu_phrases', JSON.stringify(phrases));
-    localStorage.setItem('bubu_history', JSON.stringify(history));
-}
-
-// Initialize Speech Synthesis
 const synth = window.speechSynthesis;
 let voices = [];
+let lastMessage = localStorage.getItem('bubu_last_message') || '';
+
+const priorityPhrases = [
+    { emoji: '👶', label: 'Dame a la bebé', text: 'Dame a la bebé' },
+    { emoji: '😣', label: 'Me duele', text: 'Me duele' },
+    { emoji: '💧', label: 'Tengo sed', text: 'Tengo sed' },
+    { emoji: '👩‍⚕️', label: 'Enfermera', text: 'Llama a la enfermera por favor' }
+];
+
+const commonPhrases = [
+    { emoji: '✅', label: 'Sí', text: 'Sí' },
+    { emoji: '❌', label: 'No', text: 'No' },
+    { emoji: '🐢', label: 'Despacio', text: 'Despacio por favor' },
+    { emoji: '✋', label: 'Espera', text: 'Espera por favor' },
+    { emoji: '🚫', label: 'No puedo', text: 'No puedo' },
+    { emoji: '🙂', label: 'Estoy bien', text: 'Estoy bien' },
+    { emoji: '💊', label: 'Medicina', text: 'Necesito medicina para el dolor' },
+    { emoji: '🚽', label: 'Baño', text: 'Necesito ir al baño' },
+    { emoji: '🛏️', label: 'Acomódame', text: 'Ayúdame a acomodarme' },
+    { emoji: '🤝', label: 'Quédate', text: 'Quédate conmigo' },
+    { emoji: '🍼', label: 'Lactar', text: 'Ayúdame a darle de lactar a la bebé' },
+    { emoji: '🤲', label: 'Toma a la bebé', text: 'Toma a la bebé por favor' },
+    { emoji: '🤢', label: 'Náuseas', text: 'Tengo náuseas' },
+    { emoji: '🥶', label: 'Frío', text: 'Tengo frío' },
+    { emoji: '🥵', label: 'Calor', text: 'Tengo calor' },
+    { emoji: '🙏', label: 'Gracias', text: 'Gracias amor' }
+];
 
 function loadVoices() {
     voices = synth.getVoices();
@@ -46,212 +51,123 @@ if (speechSynthesis.onvoiceschanged !== undefined) {
     speechSynthesis.onvoiceschanged = loadVoices;
 }
 
+function addMessage(text) {
+    const emptyMessage = chatLog.querySelector('.empty-message');
+    if (emptyMessage) emptyMessage.remove();
+
+    const message = document.createElement('div');
+    message.className = 'message';
+    message.textContent = text;
+    chatLog.prepend(message);
+}
+
+function showToast(text) {
+    spokenToast.innerHTML = `<span>Diciendo</span><strong>${text}</strong>`;
+    spokenToast.classList.remove('hidden');
+    clearTimeout(showToast.timer);
+    showToast.timer = setTimeout(() => {
+        spokenToast.classList.add('hidden');
+    }, 2200);
+}
+
 function speak(text) {
-    if (synth.speaking) {
-        console.error('speechSynthesis.speaking');
-        return;
-    }
-    if (text !== '') {
-        const utterThis = new SpeechSynthesisUtterance(text);
+    const cleanText = text.trim();
+    if (!cleanText) return;
 
-        // Try to find a Spanish voice
-        const spanishVoice = voices.find(voice => voice.lang.includes('es'));
-        if (spanishVoice) {
-            utterThis.voice = spanishVoice;
-        }
+    if (synth.speaking) synth.cancel();
 
-        const speechIndicator = document.getElementById('speechIndicator');
+    const utterance = new SpeechSynthesisUtterance(cleanText);
+    const spanishVoice = voices.find(voice => voice.lang.toLowerCase().startsWith('es'));
+    if (spanishVoice) utterance.voice = spanishVoice;
 
-        // Force show immediately
-        speechIndicator.classList.remove('hidden');
+    utterance.rate = 0.95;
+    utterance.pitch = 1;
+    utterance.volume = 1;
 
-        utterThis.onstart = () => {
-            speechIndicator.classList.remove('hidden');
-        };
+    utterance.onstart = () => speechIndicator.classList.remove('hidden');
+    utterance.onend = () => speechIndicator.classList.add('hidden');
+    utterance.onerror = () => speechIndicator.classList.add('hidden');
 
-        utterThis.onend = () => {
-            speechIndicator.classList.add('hidden');
-        };
-
-        // Fallback: Hide after 5 seconds max (in case onend doesn't fire)
-        setTimeout(() => {
-            speechIndicator.classList.add('hidden');
-        }, 5000);
-
-        utterThis.pitch = 1;
-        utterThis.rate = 1;
-        synth.speak(utterThis);
-
-        // Visual feedback on button
-        if (text === textInput.value) {
-            speakBtn.classList.add('speaking');
-            setTimeout(() => speakBtn.classList.remove('speaking'), 1000);
-        }
-
-        // Update phrase count if it matches a default phrase
-        const phraseIndex = phrases.findIndex(p => p.text.toLowerCase() === text.toLowerCase());
-        if (phraseIndex !== -1) {
-            phrases[phraseIndex].count++;
-        } else {
-            // Add new custom phrase
-            phrases.push({
-                text: text,
-                emoji: "💬",
-                label: text.length > 20 ? text.substring(0, 20) + '...' : text,
-                count: 1
-            });
-        }
-
-        saveData(); // Save changes
-        renderPhrases(); // Re-render to show updated count and order
-
-        // Add to history
-        addToHistory(text);
-    }
+    synth.speak(utterance);
+    lastMessage = cleanText;
+    localStorage.setItem('bubu_last_message', lastMessage);
+    showToast(cleanText);
+    addMessage(cleanText);
 }
 
-function addToHistory(text) {
-    const now = new Date();
-    const timeString = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-
-    // Prevent duplicate consecutive entries
-    if (history.length > 0 && history[0].text === text) return;
-
-    history.unshift({ text, time: timeString });
-    saveData(); // Save history
-    renderHistory();
+function stopVoice() {
+    if (synth.speaking) synth.cancel();
+    speechIndicator.classList.add('hidden');
+    spokenToast.classList.add('hidden');
 }
 
-function renderHistory() {
-    if (history.length === 0) {
-        historyList.innerHTML = '<div class="empty-state">Aquí aparecerá lo que digas...</div>';
-        return;
-    }
-
-    historyList.innerHTML = history.map(item => `
-        <div class="history-item" onclick="speak('${item.text}')">
-            <span>${item.text}</span>
-            <span class="time">${item.time}</span>
-        </div>
-    `).join('');
-}
-
-// Render Quick Phrases
-function renderPhrases() {
-    // Sort phrases by count (descending)
-    const sortedPhrases = [...phrases].sort((a, b) => b.count - a.count);
-
-    quickPhrasesGrid.innerHTML = sortedPhrases.map((phrase, index) => `
-        <button class="phrase-btn" onclick="${isEditMode ? '' : `speak('${phrase.text}')`}">
-            <div class="phrase-content">
-                <span class="emoji">${phrase.emoji}</span>
-                ${phrase.label}
-            </div>
-            ${phrase.count > 0 ? `<span class="count-badge">${phrase.count}</span>` : ''}
-            ${isEditMode ? `<div class="delete-btn" onclick="deletePhrase('${phrase.text}')">✕</div>` : ''}
-        </button>
-    `).join('');
-}
-
-function deletePhrase(text) {
-    phrases = phrases.filter(p => p.text !== text);
-    saveData(); // Save deletion
-    renderPhrases();
-}
-
-function playAlert() {
+function playSoftAlert() {
     const audioContext = new (window.AudioContext || window.webkitAudioContext)();
     const oscillator = audioContext.createOscillator();
     const gainNode = audioContext.createGain();
 
     oscillator.connect(gainNode);
     gainNode.connect(audioContext.destination);
-
     oscillator.type = 'sine';
-    oscillator.frequency.setValueAtTime(440, audioContext.currentTime); // A4
-    oscillator.frequency.exponentialRampToValueAtTime(880, audioContext.currentTime + 0.1); // Slide up
-
-    gainNode.gain.setValueAtTime(0.5, audioContext.currentTime);
+    oscillator.frequency.setValueAtTime(620, audioContext.currentTime);
+    oscillator.frequency.setValueAtTime(780, audioContext.currentTime + 0.15);
+    gainNode.gain.setValueAtTime(0.35, audioContext.currentTime);
     gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5);
-
     oscillator.start();
     oscillator.stop(audioContext.currentTime + 0.5);
 }
 
-// Event Listeners
-const suggestionsContainer = document.getElementById('suggestions');
+function renderPhraseGrid(grid, phrases, className) {
+    grid.innerHTML = '';
 
-textInput.addEventListener('input', () => {
-    const text = textInput.value.toLowerCase().trim();
-    if (text.length < 2) {
-        suggestionsContainer.classList.add('hidden');
-        return;
-    }
-
-    // Filter phrases that contain the text
-    const matches = phrases.filter(p => p.text.toLowerCase().includes(text));
-
-    if (matches.length > 0) {
-        suggestionsContainer.innerHTML = matches.map(p => `
-            <button class="suggestion-chip" onclick="applySuggestion('${p.text}')">
-                ${p.emoji} ${p.label}
-            </button>
-        `).join('');
-        suggestionsContainer.classList.remove('hidden');
-    } else {
-        suggestionsContainer.classList.add('hidden');
-    }
-});
-
-function applySuggestion(text) {
-    textInput.value = text;
-    suggestionsContainer.classList.add('hidden');
-    speak(text);
+    phrases.forEach(phrase => {
+        const button = document.createElement('button');
+        button.className = className;
+        button.innerHTML = `<span>${phrase.emoji}</span>${phrase.label}`;
+        button.addEventListener('click', () => speak(phrase.text));
+        grid.appendChild(button);
+    });
 }
 
-speakBtn.addEventListener('click', () => {
-    speak(textInput.value);
-});
+function renderPhrases() {
+    renderPhraseGrid(priorityGrid, priorityPhrases, 'priority-btn');
+    renderPhraseGrid(commonGrid, commonPhrases, 'phrase-btn');
+}
 
+speakBtn.addEventListener('click', () => speak(textInput.value));
+repeatBtn.addEventListener('click', () => {
+    if (lastMessage) speak(lastMessage);
+});
+stopBtn.addEventListener('click', stopVoice);
 clearBtn.addEventListener('click', () => {
     textInput.value = '';
     textInput.focus();
-    suggestionsContainer.classList.add('hidden');
 });
 
-alertBtn.addEventListener('click', playAlert);
+helpBtn.addEventListener('click', () => {
+    playSoftAlert();
+    speak('Amor, ayúdame por favor');
+});
 
-const whatsappBtn = document.getElementById('whatsappBtn');
-const sleepModeBtn = document.getElementById('sleepModeBtn');
-const sleepOverlay = document.getElementById('sleepOverlay');
+nurseBtn.addEventListener('click', () => speak('Llama a la enfermera por favor'));
 
 whatsappBtn.addEventListener('click', () => {
-    const phoneNumber = "51995566892";
-    const message = encodeURIComponent("Amor, ven por favor");
+    const phoneNumber = localStorage.getItem('bubu_whatsapp_phone') || '51995566892';
+    const message = encodeURIComponent(lastMessage || 'Amor, ayúdame por favor');
     window.open(`https://wa.me/${phoneNumber}?text=${message}`, '_blank');
-});
-
-sleepModeBtn.addEventListener('click', () => {
-    sleepOverlay.classList.remove('hidden');
-});
-
-sleepOverlay.addEventListener('click', () => {
-    sleepOverlay.classList.add('hidden');
 });
 
 themeToggle.addEventListener('click', () => {
     document.body.classList.toggle('dark-mode');
-    themeToggle.textContent = document.body.classList.contains('dark-mode') ? '☀️' : '🌙';
+    const isDark = document.body.classList.contains('dark-mode');
+    themeToggle.textContent = isDark ? '☀️' : '🌙';
+    localStorage.setItem('bubu_dark_mode', isDark ? '1' : '0');
 });
 
-editModeBtn.addEventListener('click', () => {
-    isEditMode = !isEditMode;
-    editModeBtn.textContent = isEditMode ? 'Listo' : 'Editar';
-    editModeBtn.style.color = isEditMode ? 'var(--primary-hover)' : 'var(--primary-color)';
-    renderPhrases();
-});
+if (localStorage.getItem('bubu_dark_mode') === '1') {
+    document.body.classList.add('dark-mode');
+    themeToggle.textContent = '☀️';
+}
 
-// Initial render
 renderPhrases();
-renderHistory();
 loadVoices();

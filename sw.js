@@ -1,4 +1,4 @@
-const CACHE_NAME = 'bubu-app-v14-zen-button-view';
+const CACHE_NAME = 'bubu-app-v15-iphone-16-pro';
 const ASSETS_TO_CACHE = [
     './',
     './index.html',

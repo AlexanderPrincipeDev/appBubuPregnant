@@ -39,11 +39,11 @@ body {
     background: var(--bg);
     color: var(--text);
     font-family: var(--font);
-    padding: 14px;
-    padding-top: max(14px, env(safe-area-inset-top));
-    padding-right: max(14px, env(safe-area-inset-right));
-    padding-bottom: max(14px, env(safe-area-inset-bottom));
-    padding-left: max(14px, env(safe-area-inset-left));
+    padding: 10px;
+    padding-top: max(10px, env(safe-area-inset-top));
+    padding-right: max(10px, env(safe-area-inset-right));
+    padding-bottom: max(10px, env(safe-area-inset-bottom));
+    padding-left: max(10px, env(safe-area-inset-left));
     display: flex;
     justify-content: center;
 }
@@ -66,53 +66,54 @@ button {
 }
 
 .app-shell {
-    width: min(100%, 980px);
-    min-height: calc(100vh - 28px);
+    width: min(100%, 430px);
+    min-height: calc(100vh - 20px);
     margin: 0 auto;
     display: flex;
     flex-direction: column;
-    gap: 14px;
+    gap: 10px;
 }
 
 .app-header {
     display: flex;
     justify-content: space-between;
-    align-items: flex-start;
-    gap: 14px;
-    padding: 8px 2px;
+    align-items: center;
+    gap: 10px;
+    padding: 4px 2px 2px;
 }
 
 .header-actions {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 8px;
     flex: 0 0 auto;
 }
 
 .view-toggle-btn {
-    min-height: 46px;
+    min-height: 42px;
     border-radius: 999px;
-    padding: 0 16px;
+    padding: 0 12px;
     background: var(--primary);
     color: white;
     font-weight: 800;
+    font-size: 0.92rem;
     touch-action: manipulation;
 }
 
 h1 {
-    font-size: clamp(2rem, 8vw, 3.2rem);
+    font-size: clamp(1.65rem, 7.5vw, 2.25rem);
     line-height: 1;
-    margin: 4px 0 6px;
+    margin: 2px 0 3px;
 }
 
 .app-header p:last-child {
     color: var(--muted);
-    font-size: 1rem;
+    font-size: 0.88rem;
 }
 
 .round-btn {
-    width: 46px;
-    height: 46px;
+    width: 42px;
+    height: 42px;
     border-radius: 50%;
     background: var(--soft);
     color: var(--text);
@@ -133,18 +134,18 @@ h1 {
 
 .chat-card {
     position: relative;
-    padding: 16px;
+    padding: 12px;
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 10px;
 }
 
 .current-message {
-    min-height: 112px;
+    min-height: 96px;
     background: linear-gradient(135deg, var(--primary), var(--primary-dark));
     color: white;
-    border-radius: 22px;
-    padding: 18px;
+    border-radius: 20px;
+    padding: 14px;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -152,7 +153,7 @@ h1 {
 }
 
 .current-message span {
-    font-size: 0.9rem;
+    font-size: 0.8rem;
     opacity: 0.82;
     font-weight: 700;
     text-transform: uppercase;
@@ -160,20 +161,20 @@ h1 {
 }
 
 .current-message strong {
-    font-size: clamp(1.45rem, 4vw, 2.2rem);
+    font-size: clamp(1.25rem, 6vw, 1.65rem);
     line-height: 1.12;
 }
 
 textarea {
     width: 100%;
-    min-height: 150px;
+    min-height: 118px;
     resize: none;
     border: 2px solid var(--border);
-    border-radius: 20px;
+    border-radius: 18px;
     background: var(--soft);
     color: var(--text);
-    padding: 16px;
-    font-size: 1.28rem;
+    padding: 13px;
+    font-size: 1.08rem;
     outline: none;
 }
 
@@ -184,8 +185,8 @@ textarea:focus {
 
 .main-actions {
     display: grid;
-    grid-template-columns: 1.35fr 1fr 1fr;
-    gap: 10px;
+    grid-template-columns: 1.25fr 1fr 1fr;
+    gap: 8px;
 }
 
 .primary-btn,
@@ -195,10 +196,10 @@ textarea:focus {
 .category-btn,
 .help-btn,
 .quiet-btn {
-    min-height: 64px;
-    border-radius: 18px;
+    min-height: 58px;
+    border-radius: 16px;
     font-weight: 700;
-    font-size: 1.06rem;
+    font-size: 0.98rem;
     transition: transform 0.16s ease, background 0.16s ease;
 }
 
@@ -229,14 +230,14 @@ textarea:focus {
 }
 
 .quick-section {
-    padding: 16px;
+    padding: 12px;
 }
 
 .button-only-view {
     position: fixed;
     inset: 0;
     z-index: 40;
-    padding: max(18px, env(safe-area-inset-top)) max(18px, env(safe-area-inset-right)) max(18px, env(safe-area-inset-bottom)) max(18px, env(safe-area-inset-left));
+    padding: max(10px, env(safe-area-inset-top)) max(10px, env(safe-area-inset-right)) max(12px, env(safe-area-inset-bottom)) max(10px, env(safe-area-inset-left));
     overflow-y: auto;
     background: var(--bg);
     border: 0;
@@ -255,30 +256,30 @@ body.button-only-mode {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap: 16px;
-    margin: -4px 0 14px;
-    padding: 6px 0 12px;
+    gap: 10px;
+    margin: -2px 0 10px;
+    padding: 4px 0 8px;
     background: var(--bg);
 }
 
 .zen-header h2 {
-    font-size: clamp(1.7rem, 3vw, 2.4rem);
+    font-size: clamp(1.45rem, 7vw, 1.9rem);
     line-height: 1;
 }
 
 .zen-header p {
     color: var(--muted);
-    font-size: 1rem;
-    margin-top: 4px;
+    font-size: 0.88rem;
+    margin-top: 3px;
 }
 
 .zen-close-btn {
-    width: 68px;
-    height: 68px;
+    width: 58px;
+    height: 58px;
     border-radius: 50%;
     background: var(--danger);
     color: white;
-    font-size: 3rem;
+    font-size: 2.5rem;
     line-height: 1;
     font-weight: 400;
     flex: 0 0 auto;
@@ -288,13 +289,13 @@ body.button-only-mode {
 .category-board {
     display: grid;
     grid-template-columns: 1fr;
-    gap: 12px;
+    gap: 9px;
 }
 
 .button-category {
     border: 1px solid var(--border);
-    border-radius: 20px;
-    padding: 12px;
+    border-radius: 18px;
+    padding: 9px;
     background: rgba(255, 255, 255, 0.42);
 }
 
@@ -303,8 +304,8 @@ body.dark-mode .button-category {
 }
 
 .button-category h3 {
-    font-size: 0.98rem;
-    margin-bottom: 8px;
+    font-size: 0.9rem;
+    margin-bottom: 7px;
 }
 
 .category-grid {
@@ -314,19 +315,19 @@ body.dark-mode .button-category {
 }
 
 .priority-section {
-    padding: 16px;
+    padding: 12px;
 }
 
 .priority-grid {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 10px;
+    gap: 8px;
 }
 
 .priority-btn {
     position: relative;
-    min-height: 104px;
-    border-radius: 22px;
+    min-height: 86px;
+    border-radius: 18px;
     background: var(--primary);
     color: white;
     box-shadow: 0 12px 28px rgba(219, 39, 119, 0.24);
@@ -334,12 +335,12 @@ body.dark-mode .button-category {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 8px;
-    padding: 12px;
+    gap: 6px;
+    padding: 10px;
 }
 
 .priority-btn .button-emoji {
-    font-size: 2.25rem;
+    font-size: 1.85rem;
     line-height: 1;
 }
 
@@ -412,14 +413,14 @@ body.dark-mode .button-category {
 }
 
 .quick-section h2 {
-    font-size: 1.15rem;
-    margin-bottom: 12px;
+    font-size: 1rem;
+    margin-bottom: 9px;
 }
 
 .common-grid {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 10px;
+    gap: 8px;
 }
 
 .phrase-btn {
@@ -427,13 +428,13 @@ body.dark-mode .button-category {
     background: var(--card);
     color: var(--text);
     border: 2px solid var(--border);
-    min-height: 96px;
-    padding: 10px;
+    min-height: 82px;
+    padding: 8px;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 7px;
+    gap: 5px;
 }
 
 .category-btn {
@@ -452,33 +453,33 @@ body.dark-mode .button-category {
 }
 
 .phrase-btn .button-emoji {
-    font-size: 2.05rem;
+    font-size: 1.65rem;
     line-height: 1;
 }
 
 .category-btn .button-emoji {
-    font-size: 1.45rem;
+    font-size: 1.32rem;
     line-height: 1;
 }
 
 .category-btn .button-label {
-    font-size: 0.9rem;
+    font-size: 0.82rem;
 }
 
 .count-badge {
     position: absolute;
-    top: 8px;
-    right: 8px;
-    min-width: 26px;
-    height: 26px;
-    padding: 0 8px;
+    top: 6px;
+    right: 6px;
+    min-width: 23px;
+    height: 23px;
+    padding: 0 7px;
     border-radius: 999px;
     background: rgba(255, 255, 255, 0.9);
     color: var(--text);
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    font-size: 0.82rem;
+    font-size: 0.74rem;
     font-weight: 800;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.12);
 }
@@ -495,18 +496,18 @@ body.dark-mode .button-category {
 
 
 .quiet-section {
-    padding: 16px;
+    padding: 12px;
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 10px;
+    gap: 8px;
 }
 
 .help-btn {
     grid-column: 1 / -1;
-    min-height: 74px;
+    min-height: 66px;
     background: var(--danger);
     color: white;
-    font-size: 1.08rem;
+    font-size: 1rem;
 }
 
 .modal-backdrop {
@@ -517,44 +518,44 @@ body.dark-mode .button-category {
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 24px;
+    padding: 16px;
 }
 
 .modal-card {
-    width: min(100%, 460px);
+    width: min(100%, 390px);
     background: var(--card);
     color: var(--text);
-    border-radius: 26px;
+    border-radius: 22px;
     border: 1px solid var(--border);
     box-shadow: 0 24px 70px rgba(0, 0, 0, 0.32);
-    padding: 26px;
+    padding: 20px;
     text-align: center;
 }
 
 .modal-card h2 {
-    font-size: 1.6rem;
+    font-size: 1.35rem;
     margin-bottom: 10px;
 }
 
 .modal-card p {
     color: var(--muted);
-    font-size: 1.08rem;
+    font-size: 0.98rem;
     line-height: 1.35;
-    margin-bottom: 22px;
+    margin-bottom: 18px;
 }
 
 .modal-actions {
     display: grid;
     grid-template-columns: 1.25fr 1fr;
-    gap: 12px;
+    gap: 8px;
 }
 
 .modal-cancel-btn,
 .modal-danger-btn {
-    min-height: 62px;
+    min-height: 56px;
     border-radius: 18px;
     font-weight: 800;
-    font-size: 1.02rem;
+    font-size: 0.96rem;
     touch-action: manipulation;
 }
 
@@ -599,179 +600,36 @@ body.dark-mode .button-category {
     }
 }
 
-@media (min-width: 680px) {
+@media (min-width: 431px) {
     body {
-        padding: 24px;
+        padding: 16px;
+        padding-top: max(16px, env(safe-area-inset-top));
+        padding-right: max(16px, env(safe-area-inset-right));
+        padding-bottom: max(16px, env(safe-area-inset-bottom));
+        padding-left: max(16px, env(safe-area-inset-left));
     }
 
     .app-shell {
-        min-height: calc(100vh - 48px);
-    }
-
-    .common-grid {
-        grid-template-columns: repeat(3, minmax(0, 1fr));
+        min-height: calc(100vh - 32px);
     }
 }
 
-@media (min-width: 900px) {
-    body {
-        padding: 28px;
-        align-items: center;
-    }
-
-    .app-shell {
-        min-height: min(820px, calc(100vh - 56px));
-        display: grid;
-        grid-template-columns: 1fr 1.12fr;
-        grid-template-rows: auto auto 1fr auto;
-        gap: 18px;
-    }
-
-    .app-header {
-        grid-column: 1 / -1;
-        padding: 4px 4px 0;
-    }
-
-    .chat-card {
-        grid-column: 1;
-        grid-row: 2 / 4;
-        padding: 20px;
-    }
-
-    .priority-section {
-        grid-column: 2;
-        grid-row: 2;
-        padding: 20px;
-    }
-
-    .quick-section {
-        grid-column: 2;
-        grid-row: 3;
-        padding: 20px;
-    }
-
-    .button-only-view {
-        padding: max(20px, env(safe-area-inset-top)) max(20px, env(safe-area-inset-right)) max(20px, env(safe-area-inset-bottom)) max(20px, env(safe-area-inset-left));
-    }
-
-    .quiet-section {
-        grid-column: 1 / -1;
-        grid-row: 4;
-        padding: 20px;
-        grid-template-columns: 1.4fr 1fr 1fr 1fr 1fr;
-    }
-
-    .help-btn {
-        grid-column: auto;
-    }
-
-    textarea {
-        min-height: 190px;
+@media (orientation: landscape) and (max-height: 520px) {
+    .app-header p:last-child,
+    .zen-header p {
+        display: none;
     }
 
     .current-message {
-        min-height: 170px;
+        min-height: 78px;
     }
 
-    .common-grid {
-        grid-template-columns: repeat(4, minmax(0, 1fr));
-        gap: 12px;
-    }
-
-    .priority-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 12px;
-    }
-
-    .category-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 8px;
-    }
-
-    .category-btn {
-        min-height: 66px;
-    }
-
-    .category-board {
-        grid-template-columns: repeat(3, minmax(0, 1fr));
-        gap: 12px;
-    }
-
-    .priority-btn {
-        min-height: 132px;
-        font-size: 1.16rem;
-    }
-
-    .phrase-btn {
-        min-height: 92px;
-        font-size: 1rem;
-    }
-
-    .primary-btn,
-    .secondary-btn,
-    .quiet-btn {
-        min-height: 70px;
-    }
-
-    .help-btn {
-        min-height: 80px;
-    }
-}
-
-@media (min-width: 760px) and (max-width: 899px) {
-    body {
-        padding: 26px;
-    }
-
-    .app-shell {
-        width: min(100%, 820px);
-        gap: 18px;
-    }
-
-    .chat-card,
-    .priority-section,
-    .quick-section,
-    .quiet-section {
-        padding: 22px;
-    }
-
-    .button-only-view {
-        padding: max(22px, env(safe-area-inset-top)) max(22px, env(safe-area-inset-right)) max(22px, env(safe-area-inset-bottom)) max(22px, env(safe-area-inset-left));
-    }
-
-    .common-grid {
-        grid-template-columns: repeat(3, minmax(0, 1fr));
-        gap: 12px;
-    }
-
-    .priority-grid {
-        grid-template-columns: repeat(4, minmax(0, 1fr));
-        gap: 12px;
-    }
-
-    .category-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 8px;
+    textarea {
+        min-height: 82px;
     }
 
     .category-board {
         grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-
-    .priority-btn {
-        min-height: 128px;
-    }
-
-    .phrase-btn {
-        min-height: 118px;
-    }
-
-    .current-message {
-        min-height: 150px;
-    }
-
-    textarea {
-        min-height: 180px;
     }
 }
 
@@ -785,16 +643,6 @@ body.dark-mode .button-category {
     .common-grid,
     .category-grid {
         grid-template-columns: 1fr 1fr;
-    }
-
-    .category-board {
-        grid-template-columns: 1fr;
-    }
-
-    .zen-close-btn {
-        width: 58px;
-        height: 58px;
-        font-size: 2.5rem;
     }
 
     .help-btn {
